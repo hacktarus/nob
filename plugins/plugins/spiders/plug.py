@@ -13,13 +13,13 @@ class NobPlugins(scrapy.Spider):
     name = "plugins"
     allowed_domains = ["nobuna.com"]
     start_urls = (
-        'https://www.nobuna.com/product-category/plugins/?product_count=20',
+        'https://www.nobuna.com/product-category/plugins/?product_count=2000',
     )
 
 
     def parse(self, response):
         for plugin in response.css('div.product-details-container'):
             yield {
+                'title': plugin.css('h3.product-title a::text').extract_first().strip(),                
                 'Sales_page_url': plugin.css('h3.product-title a::attr(href)').extract_first(),
-                'title': plugin.css('h3.product-title a::text').extract_first().strip(), 
             }
