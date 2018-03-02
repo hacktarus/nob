@@ -1,14 +1,27 @@
-# -*- coding: utf-8 -*-
-
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://doc.scrapy.org/en/latest/topics/items.html
-
-import scrapy
+from scrapy.item import Item, Field
 
 
-class PluginsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class PluginsItem(Item):
+        # Primary fields
+        title = Field()
+        version = Field()
+        sales_page_url = Field()
+
+        # Housekeeping fields
+        url = Field()
+        project = Field()
+        spider = Field()
+        server = Field()
+        date = Field()
+
+class SalespageItem(Item):
+        # Primary fields
+        product_title = Field()
+        version = Field()
+        price = Field()
+        developer = Field()
+        official_sales_page = Field()
+        released = Field()
+        category = Field()
+        tags = Field()
+        
