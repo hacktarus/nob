@@ -20,6 +20,6 @@ class NobPlugins(scrapy.Spider):
     def parse(self, response):
         for plugin in response.css('div.product-details-container'):
             yield {
-                'title': plugin.css('h3.product-title a::text').extract_first().strip(),                
+                #'title': plugin.css('h3.product-title a::text').extract_first().strip(),                
                 'Sales_page_url': plugin.css('h3.product-title a::attr(href)').extract_first(),
             }

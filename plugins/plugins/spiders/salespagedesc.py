@@ -1,27 +1,20 @@
 # -*- coding: utf-8 -*-
 import csv
 import scrapy
-from scrapy.http import Request
-from scrapy.loader import ItemLoader
-from plugins.items import SalespageItem
-
 
 class SalespagedescSpider(scrapy.Spider):
     name = "salespagedesc"
+    f = open("plugins.txt")
+    start_urls = [url.strip() for url in f.readlines()]
+    f.close
 
-    def start_requests(self):
-        return [scrapy.http.Request(url=start_url) for start_url in get_urls_from_csv()]
-
-def get_urls_from_csv():
-    with open('plugins.csv', 'rbU') as csv_file:
-        data = csv.reader(csv_file)
-        scrapurls = []
-        for row in data:
-            scrapurls.append(row)
-        return scrapurls
-
-def parse(self, response):
-    item = SalespageItem()
-    item['product_title'] = response.xpath('//*[@itemprop="name"][1]/text()').extract()
-    return item
-
+    def parse(self, response):
+        for desc in response.css('div.summary-container'):
+            yield {
+                'title': response.xpath('//*[@itemprop="name"][1]/text()').extract(),
+                'price': response.xpath('//*[@class="price"]/ins/span/text()').extract_first(),
+                'currency': response.xpath('//*[@class="price"]/ins/span/span/text()').extract_first(),
+                'version': response.xpath('//*[@class="product_meta"]/p/text()[1]').re('[.0-9]+'),
+                'author': response.xpath('//*[@class="product_meta"]/p/text()[3]').re('[^\s*]\w*[^\s*]'),
+                'released': response.xpath('//*[@class="product_meta"]/p/text()[4]').re('[/0-9]+'),
+            }
