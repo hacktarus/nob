@@ -17,4 +17,7 @@ class SalespagedescSpider(scrapy.Spider):
                 'version': response.xpath('//*[@class="product_meta"]/p/text()[1]').re('[.0-9]+'),
                 'author': response.xpath('//*[@class="summary entry-summary"]/div/li').re('(?<=distributed by )(.*)(?= \\(<a)'),
                 'released': response.xpath('//*[@class="product_meta"]/p/text()[4]').re('[/0-9]+'),
+                'category': response.xpath('//*[@class="posted_in"]/a/text()').extract(),
+                'tags': response.xpath('//*[@class="tagged_as"]/a/text()').extract(),
+                'official_sales_page': response.xpath('//*[@class="summary entry-summary"]/div/li[4]/a[1]/@href').extract(),
             }
