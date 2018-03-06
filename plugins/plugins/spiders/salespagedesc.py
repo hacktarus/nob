@@ -15,6 +15,6 @@ class SalespagedescSpider(scrapy.Spider):
                 'price': response.xpath('//*[@class="price"]/ins/span/text()').extract_first(),
                 'currency': response.xpath('//*[@class="price"]/ins/span/span/text()').extract_first(),
                 'version': response.xpath('//*[@class="product_meta"]/p/text()[1]').re('[.0-9]+'),
-                'author': response.xpath('//*[@class="product_meta"]/p/text()[3]').re('[^\s*]\w*[^\s*]'),
+                'author': response.xpath('//*[@class="summary entry-summary"]/div/li').re('(?<=distributed by )(.*)(?= \\(<a)'),
                 'released': response.xpath('//*[@class="product_meta"]/p/text()[4]').re('[/0-9]+'),
             }
