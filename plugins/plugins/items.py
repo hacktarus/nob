@@ -16,12 +16,13 @@ class PluginsItem(Item):
 
 class SalespageItem(Item):
         # Primary fields
-        product_title = Field()
-        version = Field()
+        title = Field()
         price = Field()
-        developer = Field()
-        official_sales_page = Field()
+        currency = Field()
+        version = Field
+        author = Field()
         released = Field()
         category = Field()
         tags = Field()
+        official_sales_page = Field()
         
