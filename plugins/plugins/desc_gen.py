@@ -9,7 +9,7 @@ with open('to_import.csv', 'w', newline='') as csvfile:
 
 # defining the constant 
 
-file_downloas_limit = ''
+file_downloads_limit = ''
 featured_image = ''
 
 
@@ -19,6 +19,7 @@ with open('spiders\\desc1.csv', newline='') as csvfile:
     for row in reader:
         print(row['title'], row['author'], row['official_sales_page'])
         name = row['title']
+        slug = name.replace(" ", "-")
         author = row['author']
         official_sales_page = row['official_sales_page']
         excerpt = " "
@@ -27,6 +28,13 @@ with open('spiders\\desc1.csv', newline='') as csvfile:
         tags = row['tags']
         released = row['released']
         price = row['price']
+        file_path = "https://topgpl.com/wp-content/uploads/edd/"+slug+".zip"
+        file_downloads_limit = ''
+        featured_image = "http://topgpl.com/wp-content/uploads/edd/2018/02/image_0.jpg"
+        SKU = ''
+        notes = ''
+        sales = ''
+        earnings = ''
 
         print (name+", "+author+", "+official_sales_page)
 
@@ -42,7 +50,7 @@ with open('spiders\\desc1.csv', newline='') as csvfile:
         desc = desc1+desc2+desc3+desc4+desc5+desc6+desc7+desc8
 
         with open('to_import.csv', 'a', newline='') as f:
-            fields=['','',name,released,author,desc,excerpt,status,categories,tags,price]
+            fields=['',slug,name,released,author,desc,excerpt,status,categories,tags,price,file_path,file_downloads_limit,featured_image,SKU,notes,sales,earnings]
             writer = csv.writer(f)
             writer.writerow(fields)
 
