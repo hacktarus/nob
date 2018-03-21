@@ -1,0 +1,31 @@
+TOPGPL process
+
+génération de la boutique OneShot
+
+	# On génère les fichiers csv avec les titres des items sans le numéro de version
+		# On utilise le spider "plugins" (plug.py)
+	- Scrap de la page plugin de nobuna.com >> output en csv une colonne avec les titres sans le numero de version. fichier nommé plugin_title.csv
+		## scrapy crawl plugins -o ../../../csv/plugin_title.csv
+		
+		# faire le spider pour scraper les nom de themes
+	- Scrap de la page theme de nobuna.com >> output en csv une colonne avec les titres sans le numero de version. fichier nommé theme_title.csv
+	
+	# On crée les images avec les titres
+	- On récupère des images libre de droit dans le dossier /addquote/in
+	
+		A ce stade, nous avons notre matière pour générer nos images finales.
+		
+	- on lance le script /addquote/app.py
+		cela a pour effet de générer les images et de les stocker dans le dossier /addquote/output
+		
+# On lance le spider salespagedesc pour lire chaque page de description et retirer les variables qui vont nous permettre de composer nos propres descriptions
+		## scrapy crawl salespagedesc -o ../../../csv/salespagedesc.csv
+	
+# on upload les images dans le folder http://topgpl.com/wp-content/uploads/edd/images/	
+
+# on upload les plugins dans le folder http://topgpl.com/wp-content/uploads/edd/plugins/
+
+# on upload les themes dans le folder http://topgpl.com/wp-content/uploads/edd/themes/
+
+# on lance le script import_file_gen.py pour générer le fichier d'import de produits dans EDD 
+
