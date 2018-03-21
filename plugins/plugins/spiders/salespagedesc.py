@@ -1,23 +1,38 @@
 # -*- coding: utf-8 -*-
 import csv
 import scrapy
+import pandas as pd
 
 class SalespagedescSpider(scrapy.Spider):
     name = "salespagedesc"
-    f = open("plugins.txt")
-    start_urls = [url.strip() for url in f.readlines()]
-    f.close
+    download_delay = 1
+    colnames =['title-version','title','title_zip','Sales_page_url']
+    try:
+        lines = pd.read_csv('..\\..\\..\\csv\\plugin_title.csv', names=colnames)
+        titles = lines.Sales_page_url.tolist()
+        titles.reverse()
+        titles.pop()
+        titles.reverse()
+        start_urls = titles
+    except FileNotFoundError:
+        print("the file plugin_title.csv does not exist and we don't care !")
+
+    #print (titles)
 
     def parse(self, response):
-        for desc in response.css('div.summary-container'):
+            cat = response.xpath('//head').re('(?<="content_category":")(.*)(?=","tags)')
+            category = cat[0]
+            tag = response.xpath('//head').re('(?<="tags":")(.*)(?=","domain)')
+            tags = tag[0]
             yield {
                 'title': response.xpath('//*[@itemprop="name"][1]/text()').extract(),
                 'price': response.xpath('//*[@class="price"]/ins/span/text()').extract_first(),
                 'currency': response.xpath('//*[@class="price"]/ins/span/span/text()').extract_first(),
-                'version': response.xpath('//*[@class="product_meta"]/p/text()[1]').re('[.0-9]+'),
-                'author': response.xpath('//*[@class="summary entry-summary"]/div/li').re('(?<=distributed by )(.*)(?= \\(<a)'),
-                'released': response.xpath('//*[@class="product_meta"]/p/text()[4]').re('[/0-9]+'),
-                'category': response.xpath('//*[@class="posted_in"]/a/text()').extract(),
-                'tags': response.xpath('//*[@class="tagged_as"]/a/text()').extract(),
-                'official_sales_page': response.xpath('//*[@class="summary entry-summary"]/div/li[4]/a[1]/@href').extract(),
+                'version': response.xpath('//*[@class="tab-editor-container ywtm_content_tab"]/p').re('(?<=Version:</b> )(.*)(?=</p>)'),
+                'author': response.xpath('//*[@class="tab-editor-container ywtm_content_tab"]/p').re('(?<=Developer:</b> )(.*)(?=</p>)'),
+                'released': response.xpath('//*[@class="tab-editor-container ywtm_content_tab"]/p').re('(?<=Released:</b> )(.*)(?=</p>)'),
+                'license': response.xpath('//*[@class="tab-editor-container ywtm_content_tab"]/p').re('(?<=License:</b> )(.*)(?=</p>)'), 
+                'category': category,
+                'tags': tags,
+                'official_sales_page': response.xpath('//*[@class="tab-editor-container ywtm_content_tab"]/p').re('(?<=Sales Page:</b> )(.*)(?=</p>)'),
             }
